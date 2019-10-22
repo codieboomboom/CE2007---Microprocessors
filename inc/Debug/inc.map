@@ -1,0 +1,626 @@
+******************************************************************************
+                  TI ARM Linker PC v16.9.6                     
+******************************************************************************
+>> Linked Tue Jul 02 10:32:53 2019
+
+OUTPUT FILE NAME:   <inc.out>
+ENTRY POINT SYMBOL: "_c_int00"  address: 000018cd
+
+
+MEMORY CONFIGURATION
+
+         name            origin    length      used     unused   attr    fill
+----------------------  --------  ---------  --------  --------  ----  --------
+  MAIN                  00000000   00040000  00001a5a  0003e5a6  R  X
+  INFO                  00200000   00004000  00000000  00004000  R  X
+  SRAM_CODE             01000000   00010000  00000a5d  0000f5a3  RW X
+  SRAM_DATA             20000000   00010000  00000a5d  0000f5a3  RW  
+
+
+SEGMENT ALLOCATION MAP
+
+run origin  load origin   length   init length attrs members
+----------  ----------- ---------- ----------- ----- -------
+00000000    00000000    00001a60   00001a60    r-x
+  00000000    00000000    000000e4   000000e4    r-- .intvecs
+  000000e4    000000e4    00001936   00001936    r-x .text
+  00001a20    00001a20    00000040   00000040    r-- .cinit
+20000000    20000000    00000860   00000000    rw-
+  20000000    20000000    0000042d   00000000    rw- .bss
+  20000430    20000430    00000400   00000000    rw- .sysmem
+  20000830    20000830    00000030   00000000    rw- .data
+2000fe00    2000fe00    00000200   00000000    rw-
+  2000fe00    2000fe00    00000200   00000000    rw- .stack
+
+
+SECTION ALLOCATION MAP
+
+ output                                  attributes/
+section   page    origin      length       input sections
+--------  ----  ----------  ----------   ----------------
+.intvecs   0    00000000    000000e4     
+                  00000000    000000e4     startup_msp432p401r_ccs.obj (.intvecs:retain)
+
+.binit     0    00000000    00000000     
+
+.text      0    000000e4    00001936     
+                  000000e4    00000630     TExaS.obj (.text)
+                  00000714    000005ba     EUSCIA0.obj (.text)
+                  00000cce    00000002     incmain.obj (.text)
+                  00000cd0    0000032c     system_msp432p401r.obj (.text)
+                  00000ffc    00000210     FIFO0.obj (.text)
+                  0000120c    000001a4     UART1.obj (.text)
+                  000013b0    0000012c     TA3InputCapture.obj (.text)
+                  000014dc    000000ac     TimerA0.obj (.text)
+                  00001588    000000ac     TimerA1.obj (.text)
+                  00001634    000000a8     TimerA2.obj (.text)
+                  000016dc    0000009c     rtsv7M4_T_le_v4SPD16_eabi.lib : memcpy_t2.obj (.text)
+                  00001778    0000007a                                   : memset_t2.obj (.text)
+                  000017f2    00000002                                   : mpu_init.obj (.text)
+                  000017f4    00000070                                   : autoinit.obj (.text)
+                  00001864    00000068                                   : copy_decompress_lzss.obj (.text:decompress:lzss)
+                  000018cc    00000054                                   : boot.obj (.text)
+                  00001920    00000054                                   : exit.obj (.text)
+                  00001974    0000004c                                   : cpy_tbl.obj (.text)
+                  000019c0    00000018                                   : args_main.obj (.text)
+                  000019d8    00000014                                   : _lock.obj (.text)
+                  000019ec    0000000e                                   : copy_decompress_none.obj (.text:decompress:none)
+                  000019fa    0000000e     startup_msp432p401r_ccs.obj (.text)
+                  00001a08    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : copy_zero_init.obj (.text:decompress:ZI)
+                  00001a14    00000004                                   : pre_init.obj (.text)
+                  00001a18    00000002                                   : startup.obj (.text)
+
+.cinit     0    00001a20    00000040     
+                  00001a20    0000001c     (.cinit..data.load) [load image, compression = lzss]
+                  00001a3c    0000000c     (__TI_handler_table)
+                  00001a48    00000008     (.cinit..bss.load) [load image, compression = zero_init]
+                  00001a50    00000010     (__TI_cinit_table)
+
+.init_array 
+*          0    00000000    00000000     UNINITIALIZED
+
+.bss       0    20000000    0000042d     UNINITIALIZED
+                  20000000    00000200     (.common:TxHistogram)
+                  20000200    00000100     (.common:RxFIFO)
+                  20000300    00000082     (.common:RxFifo0)
+                  20000382    00000082     (.common:TxFifo0)
+                  20000404    00000008     (.common:Messagec)
+                  2000040c    00000004     (.common:Messageindexc)
+                  20000410    00000004     (.common:PeriodicTask2)
+                  20000414    00000004     (.common:RxFifoLost)
+                  20000418    00000004     (.common:RxGetI)
+                  2000041c    00000004     (.common:RxPutI)
+                  20000420    00000004     (.common:TimerA0Task)
+                  20000424    00000004     (.common:TimerA1Task)
+                  20000428    00000004     (.common:TimerA2Task)
+                  2000042c    00000001     (.common:LogicData)
+
+.sysmem    0    20000430    00000400     UNINITIALIZED
+                  20000430    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : memory.obj (.sysmem)
+                  20000438    000003f8     --HOLE--
+
+.data      0    20000830    00000030     UNINITIALIZED
+                  20000830    0000000c     rtsv7M4_T_le_v4SPD16_eabi.lib : exit.obj (.data:$O1$$)
+                  2000083c    0000000c     TExaS.obj (.data)
+                  20000848    00000008     rtsv7M4_T_le_v4SPD16_eabi.lib : _lock.obj (.data:$O1$$)
+                  20000850    00000008     TA3InputCapture.obj (.data)
+                  20000858    00000004     rtsv7M4_T_le_v4SPD16_eabi.lib : stkdepth_vars.obj (.data)
+                  2000085c    00000004     system_msp432p401r.obj (.data)
+
+.stack     0    2000fe00    00000200     UNINITIALIZED
+                  2000fe00    00000200     --HOLE--
+
+MODULE SUMMARY
+
+       Module                        code   ro data   rw data
+       ------                        ----   -------   -------
+    .\
+       FIFO0.obj                     528    0         1544   
+       TExaS.obj                     1584   0         34     
+       EUSCIA0.obj                   1466   0         24     
+       UART1.obj                     420    0         536    
+       system_msp432p401r.obj        812    0         8      
+       TA3InputCapture.obj           300    0         16     
+       startup_msp432p401r_ccs.obj   14     228       0      
+       TimerA0.obj                   172    0         8      
+       TimerA1.obj                   172    0         8      
+       TimerA2.obj                   168    0         8      
+       incmain.obj                   2      0         0      
+    +--+-----------------------------+------+---------+---------+
+       Total:                        5638   228       2186   
+                                                             
+    C:\ti\ccs740\ccsv7\tools\compiler\ti-cgt-arm_16.9.6.LTS\lib\rtsv7M4_T_le_v4SPD16_eabi.lib
+       memcpy_t2.obj                 156    0         0      
+       memset_t2.obj                 122    0         0      
+       autoinit.obj                  112    0         0      
+       exit.obj                      84     0         24     
+       copy_decompress_lzss.obj      104    0         0      
+       boot.obj                      84     0         0      
+       cpy_tbl.obj                   76     0         0      
+       _lock.obj                     20     0         16     
+       args_main.obj                 24     0         0      
+       copy_decompress_none.obj      14     0         0      
+       copy_zero_init.obj            12     0         0      
+       stkdepth_vars.obj             0      0         8      
+       pre_init.obj                  4      0         0      
+       mpu_init.obj                  2      0         0      
+       startup.obj                   2      0         0      
+    +--+-----------------------------+------+---------+---------+
+       Total:                        816    0         48     
+                                                             
+       Heap:                         0      0         2048   
+       Stack:                        0      0         1024   
+       Linker Generated:             0      64        0      
+    +--+-----------------------------+------+---------+---------+
+       Grand Total:                  6454   292       5306   
+
+
+LINKER GENERATED COPY TABLES
+
+__TI_cinit_table @ 00001a50 records: 2, size/record: 8, table size: 16
+	.data: load addr=00001a20, load size=0000001c bytes, run addr=20000830, run size=00000030 bytes, compression=lzss
+	.bss: load addr=00001a48, load size=00000008 bytes, run addr=20000000, run size=0000042d bytes, compression=zero_init
+
+
+LINKER GENERATED HANDLER TABLE
+
+__TI_handler_table @ 00001a3c records: 3, size/record: 4, table size: 12
+	index: 0, handler: __TI_decompress_lzss
+	index: 1, handler: __TI_decompress_none
+	index: 2, handler: __TI_zero_init
+
+
+GLOBAL SYMBOLS: SORTED ALPHABETICALLY BY Name 
+
+address   name                           
+-------   ----                           
+00001a07  ADC14_IRQHandler               
+00000475  ADC_Init                       
+00001a07  AES256_IRQHandler              
+00001a07  BusFault_Handler               
+00001921  C$$EXIT                        
+00001a07  COMP_E0_IRQHandler             
+00001a07  COMP_E1_IRQHandler             
+00001a07  CS_IRQHandler                  
+20000850  CaptureTask0                   
+20000854  CaptureTask2                   
+00001a07  DMA_ERR_IRQHandler             
+00001a07  DMA_INT0_IRQHandler            
+00001a07  DMA_INT1_IRQHandler            
+00001a07  DMA_INT2_IRQHandler            
+00001a07  DMA_INT3_IRQHandler            
+00001a07  DebugMon_Handler               
+00001a07  Default_Handler                
+000007a7  EUSCIA0_IRQHandler             
+000007a7  EUSCIA0_IRQHandler             
+0000077b  EUSCIA0_InChar                 
+00000c45  EUSCIA0_InString               
+000007fb  EUSCIA0_InUDec                 
+00000af9  EUSCIA0_InUHex                 
+00000715  EUSCIA0_Init                   
+0000078d  EUSCIA0_OutChar                
+000007dd  EUSCIA0_OutString              
+0000087f  EUSCIA0_OutUDec                
+00000a11  EUSCIA0_OutUDec4               
+00000a49  EUSCIA0_OutUDec5               
+00000a85  EUSCIA0_OutUFix1               
+00000aad  EUSCIA0_OutUFix2               
+00000bc1  EUSCIA0_OutUHex                
+00000c27  EUSCIA0_OutUHex2               
+00000c05  EUSCIA0outnibble               
+00001a07  EUSCIA1_IRQHandler             
+00001335  EUSCIA2_IRQHandler             
+00001335  EUSCIA2_IRQHandler             
+00001a07  EUSCIA3_IRQHandler             
+00001a07  EUSCIB0_IRQHandler             
+00001a07  EUSCIB1_IRQHandler             
+00001a07  EUSCIB2_IRQHandler             
+00001a07  EUSCIB3_IRQHandler             
+00001a07  FLCTL_IRQHandler               
+00001a07  FPU_IRQHandler                 
+00001a07  HardFault_Handler              
+000000e5  LogicAnalyzer                  
+000000ef  LogicAnalyzer_P1               
+000001c5  LogicAnalyzer_P10              
+000000fd  LogicAnalyzer_P2               
+0000010b  LogicAnalyzer_P2_7654          
+0000011b  LogicAnalyzer_P3               
+00000129  LogicAnalyzer_P4               
+00000147  LogicAnalyzer_P4_765320        
+00000137  LogicAnalyzer_P4_765432        
+0000017f  LogicAnalyzer_P5               
+0000018d  LogicAnalyzer_P6               
+0000019b  LogicAnalyzer_P7               
+000001a9  LogicAnalyzer_P8               
+000001b7  LogicAnalyzer_P9               
+2000042c  LogicData                      
+00001a07  MemManage_Handler              
+20000404  Messagec                       
+2000040c  Messageindexc                  
+00001a07  NMI_Handler                    
+00001a07  PCM_IRQHandler                 
+00001a07  PORT1_IRQHandler               
+00001a07  PORT2_IRQHandler               
+00001a07  PORT3_IRQHandler               
+00001a07  PORT4_IRQHandler               
+00001a07  PORT5_IRQHandler               
+00001a07  PORT6_IRQHandler               
+00001a07  PSS_IRQHandler                 
+00001a07  PendSV_Handler                 
+20000410  PeriodicTask2                  
+00000257  PeriodicTask2_Init             
+000002d1  PeriodicTask2_Stop             
+00001a07  RTC_C_IRQHandler               
+000019fb  Reset_Handler                  
+20000200  RxFIFO                         
+20000300  RxFifo0                        
+00001177  RxFifo0_Get                    
+0000111d  RxFifo0_Init                   
+00001129  RxFifo0_Put                    
+000011b5  RxFifo0_Size                   
+20000414  RxFifoLost                     
+00001265  RxFifo_Get                     
+0000120d  RxFifo_Init                    
+0000121f  RxFifo_Put                     
+20000418  RxGetI                         
+2000041c  RxPutI                         
+UNDEFED   SHT$$INIT_ARRAY$$Base          
+UNDEFED   SHT$$INIT_ARRAY$$Limit         
+00001a07  SVC_Handler                    
+000001d3  Scope                          
+00001a07  SysTick_Handler                
+2000085c  SystemCoreClock                
+00000cd1  SystemCoreClockUpdate          
+00000f45  SystemInit                     
+000002c1  T32_INT1_IRQHandler            
+000002c1  T32_INT1_IRQHandler            
+00001a07  T32_INT2_IRQHandler            
+00001a07  T32_INTC_IRQHandler            
+00001557  TA0_0_IRQHandler               
+00001557  TA0_0_IRQHandler               
+00001a07  TA0_N_IRQHandler               
+000015fb  TA1_0_IRQHandler               
+000015fb  TA1_0_IRQHandler               
+00001a07  TA1_N_IRQHandler               
+000016a7  TA2_0_IRQHandler               
+000016a7  TA2_0_IRQHandler               
+00001a07  TA2_N_IRQHandler               
+0000145f  TA3_0_IRQHandler               
+0000145f  TA3_0_IRQHandler               
+00001479  TA3_N_IRQHandler               
+00001479  TA3_N_IRQHandler               
+00000413  TExaS_Clear0                   
+0000041f  TExaS_Clear1                   
+0000042b  TExaS_Clear2                   
+00000437  TExaS_Clear3                   
+00000443  TExaS_Clear4                   
+00000445  TExaS_Clear5                   
+00000451  TExaS_Clear6                   
+00000551  TExaS_Init                     
+20000840  TExaS_ScopeErrConflict         
+2000083c  TExaS_ScopeErrLostData         
+20000844  TExaS_ScopeWrnReconfig         
+000003b1  TExaS_Set                      
+000003c9  TExaS_Set0                     
+000003d5  TExaS_Set1                     
+000003e1  TExaS_Set2                     
+000003ed  TExaS_Set3                     
+000003f9  TExaS_Set4                     
+000003fb  TExaS_Set5                     
+00000407  TExaS_Set6                     
+000006b1  TExaS_Stop                     
+00000367  TExaS_Task0                    
+00000373  TExaS_Task1                    
+0000037f  TExaS_Task2                    
+0000038b  TExaS_Task3                    
+00000397  TExaS_Task4                    
+00000399  TExaS_Task5                    
+000003a5  TExaS_Task6                    
+20000420  TimerA0Task                    
+000014dd  TimerA0_Init                   
+00001541  TimerA0_Stop                   
+20000424  TimerA1Task                    
+00001589  TimerA1_Init                   
+000015e7  TimerA1_Stop                   
+20000428  TimerA2Task                    
+00001635  TimerA2_Init                   
+00001693  TimerA2_Stop                   
+000013bd  TimerA3Capture_Init            
+20000382  TxFifo0                        
+00001089  TxFifo0_Get                    
+00000ffd  TxFifo0_Init                   
+0000102f  TxFifo0_Put                    
+000010c7  TxFifo0_Size                   
+20000000  TxHistogram                    
+00001369  UART1_FinishOutput             
+00001307  UART1_InChar                   
+0000129b  UART1_InStatus                 
+000012ab  UART1_Init                     
+00001319  UART1_OutChar                  
+0000134b  UART1_OutString                
+0000033b  UART_InChar                    
+000002e1  UART_Init                      
+0000034b  UART_OutChar                   
+00001a07  UsageFault_Handler             
+4000480c  WDTCTL_SYM                     
+00001a07  WDT_A_IRQHandler               
+20010000  __STACK_END                    
+00000200  __STACK_SIZE                   
+00000400  __SYSMEM_SIZE                  
+00001a50  __TI_CINIT_Base                
+00001a60  __TI_CINIT_Limit               
+00001a3c  __TI_Handler_Table_Base        
+00001a48  __TI_Handler_Table_Limit       
+000017f5  __TI_auto_init                 
+20000830  __TI_cleanup_ptr               
+00001865  __TI_decompress_lzss           
+000019ed  __TI_decompress_none           
+20000834  __TI_dtors_ptr                 
+20000838  __TI_enable_exit_profile_output
+ffffffff  __TI_pprof_out_hndl            
+ffffffff  __TI_prof_data_size            
+ffffffff  __TI_prof_data_start           
+00000000  __TI_static_base__             
+00001a09  __TI_zero_init                 
+00001779  __aeabi_memclr                 
+00001779  __aeabi_memclr4                
+00001779  __aeabi_memclr8                
+000016dd  __aeabi_memcpy                 
+000016dd  __aeabi_memcpy4                
+000016dd  __aeabi_memcpy8                
+0000177b  __aeabi_memset                 
+0000177b  __aeabi_memset4                
+0000177b  __aeabi_memset8                
+ffffffff  __binit__                      
+ffffffff  __c_args__                     
+000017f3  __mpu_init                     
+2000fe00  __stack                        
+000019c1  _args_main                     
+000018cd  _c_int00                       
+20000848  _lock                          
+000019e7  _nop                           
+000019df  _register_lock                 
+000019d9  _register_unlock               
+20000430  _sys_memory                    
+00001a19  _system_post_cinit             
+00001a15  _system_pre_init               
+2000084c  _unlock                        
+00001925  abort                          
+ffffffff  binit                          
+00001975  copy_in                        
+0000192d  exit                           
+00000000  interruptVectors               
+00000ccf  main                           
+20000858  main_func_sp                   
+000016dd  memcpy                         
+00001781  memset                         
+000013b1  ta3dummy                       
+
+
+GLOBAL SYMBOLS: SORTED BY Symbol Address 
+
+address   name                           
+-------   ----                           
+00000000  __TI_static_base__             
+00000000  interruptVectors               
+000000e5  LogicAnalyzer                  
+000000ef  LogicAnalyzer_P1               
+000000fd  LogicAnalyzer_P2               
+0000010b  LogicAnalyzer_P2_7654          
+0000011b  LogicAnalyzer_P3               
+00000129  LogicAnalyzer_P4               
+00000137  LogicAnalyzer_P4_765432        
+00000147  LogicAnalyzer_P4_765320        
+0000017f  LogicAnalyzer_P5               
+0000018d  LogicAnalyzer_P6               
+0000019b  LogicAnalyzer_P7               
+000001a9  LogicAnalyzer_P8               
+000001b7  LogicAnalyzer_P9               
+000001c5  LogicAnalyzer_P10              
+000001d3  Scope                          
+00000200  __STACK_SIZE                   
+00000257  PeriodicTask2_Init             
+000002c1  T32_INT1_IRQHandler            
+000002c1  T32_INT1_IRQHandler            
+000002d1  PeriodicTask2_Stop             
+000002e1  UART_Init                      
+0000033b  UART_InChar                    
+0000034b  UART_OutChar                   
+00000367  TExaS_Task0                    
+00000373  TExaS_Task1                    
+0000037f  TExaS_Task2                    
+0000038b  TExaS_Task3                    
+00000397  TExaS_Task4                    
+00000399  TExaS_Task5                    
+000003a5  TExaS_Task6                    
+000003b1  TExaS_Set                      
+000003c9  TExaS_Set0                     
+000003d5  TExaS_Set1                     
+000003e1  TExaS_Set2                     
+000003ed  TExaS_Set3                     
+000003f9  TExaS_Set4                     
+000003fb  TExaS_Set5                     
+00000400  __SYSMEM_SIZE                  
+00000407  TExaS_Set6                     
+00000413  TExaS_Clear0                   
+0000041f  TExaS_Clear1                   
+0000042b  TExaS_Clear2                   
+00000437  TExaS_Clear3                   
+00000443  TExaS_Clear4                   
+00000445  TExaS_Clear5                   
+00000451  TExaS_Clear6                   
+00000475  ADC_Init                       
+00000551  TExaS_Init                     
+000006b1  TExaS_Stop                     
+00000715  EUSCIA0_Init                   
+0000077b  EUSCIA0_InChar                 
+0000078d  EUSCIA0_OutChar                
+000007a7  EUSCIA0_IRQHandler             
+000007a7  EUSCIA0_IRQHandler             
+000007dd  EUSCIA0_OutString              
+000007fb  EUSCIA0_InUDec                 
+0000087f  EUSCIA0_OutUDec                
+00000a11  EUSCIA0_OutUDec4               
+00000a49  EUSCIA0_OutUDec5               
+00000a85  EUSCIA0_OutUFix1               
+00000aad  EUSCIA0_OutUFix2               
+00000af9  EUSCIA0_InUHex                 
+00000bc1  EUSCIA0_OutUHex                
+00000c05  EUSCIA0outnibble               
+00000c27  EUSCIA0_OutUHex2               
+00000c45  EUSCIA0_InString               
+00000ccf  main                           
+00000cd1  SystemCoreClockUpdate          
+00000f45  SystemInit                     
+00000ffd  TxFifo0_Init                   
+0000102f  TxFifo0_Put                    
+00001089  TxFifo0_Get                    
+000010c7  TxFifo0_Size                   
+0000111d  RxFifo0_Init                   
+00001129  RxFifo0_Put                    
+00001177  RxFifo0_Get                    
+000011b5  RxFifo0_Size                   
+0000120d  RxFifo_Init                    
+0000121f  RxFifo_Put                     
+00001265  RxFifo_Get                     
+0000129b  UART1_InStatus                 
+000012ab  UART1_Init                     
+00001307  UART1_InChar                   
+00001319  UART1_OutChar                  
+00001335  EUSCIA2_IRQHandler             
+00001335  EUSCIA2_IRQHandler             
+0000134b  UART1_OutString                
+00001369  UART1_FinishOutput             
+000013b1  ta3dummy                       
+000013bd  TimerA3Capture_Init            
+0000145f  TA3_0_IRQHandler               
+0000145f  TA3_0_IRQHandler               
+00001479  TA3_N_IRQHandler               
+00001479  TA3_N_IRQHandler               
+000014dd  TimerA0_Init                   
+00001541  TimerA0_Stop                   
+00001557  TA0_0_IRQHandler               
+00001557  TA0_0_IRQHandler               
+00001589  TimerA1_Init                   
+000015e7  TimerA1_Stop                   
+000015fb  TA1_0_IRQHandler               
+000015fb  TA1_0_IRQHandler               
+00001635  TimerA2_Init                   
+00001693  TimerA2_Stop                   
+000016a7  TA2_0_IRQHandler               
+000016a7  TA2_0_IRQHandler               
+000016dd  __aeabi_memcpy                 
+000016dd  __aeabi_memcpy4                
+000016dd  __aeabi_memcpy8                
+000016dd  memcpy                         
+00001779  __aeabi_memclr                 
+00001779  __aeabi_memclr4                
+00001779  __aeabi_memclr8                
+0000177b  __aeabi_memset                 
+0000177b  __aeabi_memset4                
+0000177b  __aeabi_memset8                
+00001781  memset                         
+000017f3  __mpu_init                     
+000017f5  __TI_auto_init                 
+00001865  __TI_decompress_lzss           
+000018cd  _c_int00                       
+00001921  C$$EXIT                        
+00001925  abort                          
+0000192d  exit                           
+00001975  copy_in                        
+000019c1  _args_main                     
+000019d9  _register_unlock               
+000019df  _register_lock                 
+000019e7  _nop                           
+000019ed  __TI_decompress_none           
+000019fb  Reset_Handler                  
+00001a07  ADC14_IRQHandler               
+00001a07  AES256_IRQHandler              
+00001a07  BusFault_Handler               
+00001a07  COMP_E0_IRQHandler             
+00001a07  COMP_E1_IRQHandler             
+00001a07  CS_IRQHandler                  
+00001a07  DMA_ERR_IRQHandler             
+00001a07  DMA_INT0_IRQHandler            
+00001a07  DMA_INT1_IRQHandler            
+00001a07  DMA_INT2_IRQHandler            
+00001a07  DMA_INT3_IRQHandler            
+00001a07  DebugMon_Handler               
+00001a07  Default_Handler                
+00001a07  EUSCIA1_IRQHandler             
+00001a07  EUSCIA3_IRQHandler             
+00001a07  EUSCIB0_IRQHandler             
+00001a07  EUSCIB1_IRQHandler             
+00001a07  EUSCIB2_IRQHandler             
+00001a07  EUSCIB3_IRQHandler             
+00001a07  FLCTL_IRQHandler               
+00001a07  FPU_IRQHandler                 
+00001a07  HardFault_Handler              
+00001a07  MemManage_Handler              
+00001a07  NMI_Handler                    
+00001a07  PCM_IRQHandler                 
+00001a07  PORT1_IRQHandler               
+00001a07  PORT2_IRQHandler               
+00001a07  PORT3_IRQHandler               
+00001a07  PORT4_IRQHandler               
+00001a07  PORT5_IRQHandler               
+00001a07  PORT6_IRQHandler               
+00001a07  PSS_IRQHandler                 
+00001a07  PendSV_Handler                 
+00001a07  RTC_C_IRQHandler               
+00001a07  SVC_Handler                    
+00001a07  SysTick_Handler                
+00001a07  T32_INT2_IRQHandler            
+00001a07  T32_INTC_IRQHandler            
+00001a07  TA0_N_IRQHandler               
+00001a07  TA1_N_IRQHandler               
+00001a07  TA2_N_IRQHandler               
+00001a07  UsageFault_Handler             
+00001a07  WDT_A_IRQHandler               
+00001a09  __TI_zero_init                 
+00001a15  _system_pre_init               
+00001a19  _system_post_cinit             
+00001a3c  __TI_Handler_Table_Base        
+00001a48  __TI_Handler_Table_Limit       
+00001a50  __TI_CINIT_Base                
+00001a60  __TI_CINIT_Limit               
+20000000  TxHistogram                    
+20000200  RxFIFO                         
+20000300  RxFifo0                        
+20000382  TxFifo0                        
+20000404  Messagec                       
+2000040c  Messageindexc                  
+20000410  PeriodicTask2                  
+20000414  RxFifoLost                     
+20000418  RxGetI                         
+2000041c  RxPutI                         
+20000420  TimerA0Task                    
+20000424  TimerA1Task                    
+20000428  TimerA2Task                    
+2000042c  LogicData                      
+20000430  _sys_memory                    
+20000830  __TI_cleanup_ptr               
+20000834  __TI_dtors_ptr                 
+20000838  __TI_enable_exit_profile_output
+2000083c  TExaS_ScopeErrLostData         
+20000840  TExaS_ScopeErrConflict         
+20000844  TExaS_ScopeWrnReconfig         
+20000848  _lock                          
+2000084c  _unlock                        
+20000850  CaptureTask0                   
+20000854  CaptureTask2                   
+20000858  main_func_sp                   
+2000085c  SystemCoreClock                
+2000fe00  __stack                        
+20010000  __STACK_END                    
+4000480c  WDTCTL_SYM                     
+ffffffff  __TI_pprof_out_hndl            
+ffffffff  __TI_prof_data_size            
+ffffffff  __TI_prof_data_start           
+ffffffff  __binit__                      
+ffffffff  __c_args__                     
+ffffffff  binit                          
+UNDEFED   SHT$$INIT_ARRAY$$Base          
+UNDEFED   SHT$$INIT_ARRAY$$Limit         
+
+[221 symbols]
