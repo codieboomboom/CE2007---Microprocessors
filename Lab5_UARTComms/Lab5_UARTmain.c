@@ -206,31 +206,162 @@ int Program5_4(void){
   }
 }
 
+
+
+
+
+/////////////////////////////////FOR IR SENSOR/////////////////////
+
+//COPIED FROM LAB 4
+volatile uint32_t ADCflag = 0;
+volatile uint32_t nr,nc,nl;
+
+void SensorRead_ISR(void){  // runs at 2000 Hz
+  uint32_t raw17,raw12,raw16;
+  P1OUT ^= 0x01;         // profile
+  P1OUT ^= 0x01;         // profile
+  ADC_In17_12_16(&raw17,&raw12,&raw16);  // sample
+  nr = LPF_Calc(raw17);  // right is channel 17 P9.0
+  nc = LPF_Calc2(raw12); // center is channel 12, P4.1
+  nl = LPF_Calc3(raw16); // left is channel 16, P9.1
+  ADCflag = 1;           // semaphore
+  P1OUT ^= 0x01;         // profile
+}
+
+void IRSensor_Init(void){
+    uint32_t raw17,raw12,raw16;
+    uint32_t s;
+    s = 256; // replace with your choice
+    ADC0_InitSWTriggerCh17_12_16();   // initialize channels 17,12,16
+    ADC_In17_12_16(&raw17,&raw12,&raw16);  // sample
+    LPF_Init(raw17,s);     // P9.0/channel 17 right
+    LPF_Init2(raw12,s);    // P4.1/channel 12 center
+    LPF_Init3(raw16,s);    // P9.1/channel 16 left
+    TimerA1_Init(&SensorRead_ISR,250);    // 2000 Hz sampling
+    ADCflag = 0;
+}
+
+///////////////FOR BUMPER SWITCH//////////////////////////////////////
+
+uint8_t CollisionData, CollisionFlag;  // mailbox
+void HandleCollision(uint8_t bumpSensor){
+   Motor_Stop();
+   CollisionData = bumpSensor;
+   CollisionFlag = 1;
+   P4->IFG &= ~0xED;                  // clear interrupt flags (reduce possibility of extra interrupt)
+}
+
+void MotorMovt(void){
+    static uint32_t count=0;
+    static uint8_t motor_state=0;
+
+    //Write this as part of lab3 Bonus Challenge
+    if(CollisionFlag){
+            if(!(CollisionData&0x08) && !(CollisionData&0x04)){
+                // if both bump sensors 2 & 3 are activated, motor state = 1
+                // obstacle directly in front of robot
+                motor_state = 1;
+            }
+            else if(!(CollisionData&0x20) || !(CollisionData&0x10) || !(CollisionData&0x08)){
+                // if any sensors 3,4,5 are activated, motor state = 2
+                // obstacle on the left side
+                motor_state = 2;
+            }
+            else if(!(CollisionData&0x04) || !(CollisionData&0x02) || !(CollisionData&0x01)){
+                // if any sensors 2,1,0 are activated, motor state = 3
+                // obstacle on the right side
+                motor_state = 3;
+            }
+            count = 0;
+            CollisionFlag = 0;
+            Clock_Delay1ms(500);
+        }
+
+     while(count<30){
+        switch(motor_state){
+        case 0:
+            //No obstacle, continue moving forward
+            Motor_Forward(3000, 3000);
+            break;
+        case 1:
+            if(count<10){
+                //direct obstacle in front, need move backward
+                Motor_Backward(3000, 3000);
+            }
+            else if(count> 10 && count < 20){
+                //rotate to the right
+                Motor_Right(2000, 2000);
+            }
+            else if(count> 20 && count < 30){
+                //safe to move forward a bit again, test water lah
+                Motor_Forward(3000, 3000);
+                motor_state = 0;
+            }
+            break;
+        case 2:
+            // obstacle on the left side
+            if(count<10){
+                Motor_Backward(3000, 3000);
+            }
+            else if(count> 10 && count < 20){
+                Motor_Right(2000, 2000);
+            }
+            else if(count> 20 && count < 30){
+                Motor_Forward(3000, 3000);
+                motor_state = 0;
+            }
+            break;
+        case 3:
+            // obstacle on the right side
+            if(count<10){
+                Motor_Backward(3000, 3000);
+            }
+            else if(count> 10 && count < 20){
+                //only can move left
+                Motor_Left(2000, 2000);
+            }
+            else if(count> 20 && count < 30){
+                Motor_Forward(3000, 3000);
+                motor_state = 0;
+            }
+            break;
+        default:
+            break;
+        }
+
+     count++;
+    }
+}
+//////////////////////////////////RESET////////////////////////////////////////
 void RSLK_Reset(void){
     DisableInterrupts();
 
     LaunchPad_Init();
     //Initialise modules used e.g. Reflectance Sensor, Bump Switch, Motor, Tachometer etc
     // ... ...
+    CollisionFlag = 0;
 
     EnableInterrupts();
 }
-
-
-// RSLK Self-Test
+////////////////////////////////////////// RSLK Self-Test/////////////////////
 int main(void) {
   uint32_t cmd=0xDEAD, menu=0;
+  uint8_t RefData;
+  CollisionFlag = 0;
+
 
   DisableInterrupts();
   Clock_Init48MHz();  // makes SMCLK=12 MHz
   //SysTick_Init(48000,2);  // set up SysTick for 1000 Hz interrupts
-  //Motor_Init();
-  //Motor_Stop();
+  Motor_Init();
+  Motor_Stop();
   LaunchPad_Init();
-  //Bump_Init();
-  //Bumper_Init();
-  //IRSensor_Init();
-  //Tachometer_Init();
+  Reflectance_Init();
+  IRSensor_Init();
+  //BumpInt_Init(&HandleCollision);
+    //Bump_Init();
+  //  Bumper_Init();
+  Tachometer_Init(); //this prevents words from appearing
   EUSCIA0_Init();     // initialize UART
   EnableInterrupts();
 
@@ -240,9 +371,9 @@ int main(void) {
       EUSCIA0_OutString("RSLK Testing"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
       EUSCIA0_OutString("[0] RSLK Reset"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
       EUSCIA0_OutString("[1] Motor Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-      EUSCIA0_OutString("[2] IR Sensor Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-      EUSCIA0_OutString("[3] Bumper Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-      EUSCIA0_OutString("[4] Reflectance Sensor Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[2] Bumper Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[3] Reflectance Sensors Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[4] IR Sensors Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
       EUSCIA0_OutString("[5] Tachometer Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
 
       EUSCIA0_OutString("CMD: ");
@@ -250,6 +381,7 @@ int main(void) {
       EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
 
       switch(cmd){
+////////////////////////////////////////////////////////////////////////////////////////////////////
           case 0:
               EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
               EUSCIA0_OutString("RSLK Resetting... Please Wait and Don't Smash Robot"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
@@ -257,25 +389,228 @@ int main(void) {
               menu =1;
               cmd=0xDEAD;
               break;
-
+////////////////////////////////////////////////////////////////////////////////////////////////////
           case 1:
+              //MOTOR TEST WITH PWM FROM TIMER
+              //UI
               EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
               EUSCIA0_OutString("RSLK Motor Testing Loading..."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-              EUSCIA0_OutString("Please Select Test Mode (0-1)"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-              EUSCIA0_OutString("[0] "); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-              EUSCIA0_OutString("[1] "); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("Please Select Test Mode (0-3)"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("[0] Motor Forward "); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("[1] Motor Backward"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("[2] Motor Left"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("[3] Motor Right"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("[4] Go Back To Menu"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("Choice: ");
+              uint32_t choice =EUSCIA0_InUDec();
+              EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              uint32_t left_pwm;
+              uint32_t right_pwm;
+              switch (choice){
+                  case 0:
+                      //move motor forward with PWM, need ask user what PWM they want
+                      EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                      EUSCIA0_OutString("Motor Forward Test. Please input PWM (0 - 14998) for motor left, right!"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                      EUSCIA0_OutString("LEFT: ");
+                      left_pwm = EUSCIA0_InUDec();
+                      //users are stupid...
+                      if (left_pwm > 14998)
+                        left_pwm = 14998;
+                      else if (left_pwm < 0)
+                        left_pwm = 0;
+                      EUSCIA0_OutString("RIGHT: ");
+                      right_pwm = EUSCIA0_InUDec();
+                      //users are stupid again...
+                      if (left_pwm > 14998)
+                        right_pwm = 14998;
+                      else if (left_pwm < 0)
+                        right_pwm = 0;
 
-              break;
+                      //Time to buckle up
+                      Motor_Forward(left_pwm, right_pwm);
+                      Clock_Delay1ms(3000); //delay 3s
+                      Motor_Stop();
+                      break;
+                  case 1:
+                        //move motor backward with PWM, need ask user what PWM they want
+                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Motor Backward Test. Please input PWM (0 - 14998) for motor left, right!"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("LEFT: ");
+                        left_pwm = EUSCIA0_InUDec();
+                        //users are stupid...
+                        if (left_pwm > 14998)
+                          left_pwm = 14998;
+                        else if (left_pwm < 0)
+                          left_pwm = 0;
+                        EUSCIA0_OutString("RIGHT: ");
+                        right_pwm = EUSCIA0_InUDec();
+                        //users are stupid again...
+                        if (left_pwm > 14998)
+                          right_pwm = 14998;
+                        else if (left_pwm < 0)
+                          right_pwm = 0;
+
+                        //Time to buckle up
+                        Motor_Backward(left_pwm, right_pwm);
+                        Clock_Delay1ms(3000); //delay 3s
+                        Motor_Stop();
+                        break;
+
+                  case 2:
+                        //move motor left with PWM, need ask user what PWM they want
+                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Motor Left Test. Please input PWM (0 - 14998) for motor left!"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("LEFT: ");
+                        left_pwm = EUSCIA0_InUDec();
+                        //users are stupid...
+                        if (left_pwm > 14998)
+                          left_pwm = 14998;
+                        else if (left_pwm < 0)
+                          left_pwm = 0;
+                        right_pwm = 0;
+
+                        //Time to buckle up
+                        Motor_Left(left_pwm, right_pwm);
+                        Clock_Delay1ms(3000); //delay 3s
+                        Motor_Stop();
+                        break;
+
+                  case 3:
+                        //move motor right with PWM, need ask user what PWM they want
+                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Motor Right Test. Please input PWM (0 - 14998) for motor right!"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("RIGHT: ");
+                        right_pwm = EUSCIA0_InUDec();
+                        //users are stupid again...
+                        if (left_pwm > 14998)
+                          right_pwm = 14998;
+                        else if (left_pwm < 0)
+                          right_pwm = 0;
+                        left_pwm = 0;
+
+                        //Time to buckle up
+                        Motor_Right(left_pwm, right_pwm);
+                        Clock_Delay1ms(3000); //delay 3s
+                        Motor_Stop();
+                        break;
+                  default:
+                      break;
+              }
+              menu = 1;
+              cmd=0xDEAD;
+              break; //END OF MOTOR TEST
+/////////////////////////////////////////////////////////////////////////////////////////////////////
           case 2:
+                //BUMPER SWITCH TEST
+                EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                EUSCIA0_OutString("RSLK Bumper Switch Loading..."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                EUSCIA0_OutString("Please Select Test [0-1]"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                EUSCIA0_OutString("[0] Edge Interrupt Bump Switch Contact"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                EUSCIA0_OutString("[1] Individual Bumper Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                EUSCIA0_OutString("[2] Go Back To Main Menu"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                EUSCIA0_OutString("Choice: ");
+                choice =EUSCIA0_InUDec();
+                EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+
+                switch(choice){
+                    case 0:
+                        UART0_OutString("You have 3 seconds to press a bumper. \r\n");
+                        UART0_OutString("3.. \r\n");
+                        Clock_Delay1ms(1000);
+                        UART0_OutString("2.. \r\n");
+                        Clock_Delay1ms(1000);
+                        UART0_OutString("1.. \r\n");
+                        Clock_Delay1ms(1000);
+                        uint8_t bumpdata, a, n;
+                        bumpdata = Bump_Read();
+                        a=5; // bumper 5 (5th bumper)
+                        n=32; // value for bumper 5
+
+                        UART0_OutString("Bump value: ");UART0_OutUDec5(bumpdata);UART0_OutString("\r\n");
+                        while(n>=1){
+                            bumpdata = bumpdata + n;
+                            if (bumpdata<=63)
+                            {
+                                UART0_OutString("Bumper ");UART0_OutUDec5(a);UART0_OutString(" held. \r\n");
+                            }
+                            else{
+                                bumpdata = bumpdata - n;
+                            }
+                            n=n/2;
+                            a=a-1;
+                        }
+                        menu=1;
+                        cmd=0xDEAD;
+                          break;
+
+                    case 1:
+                        EUSCIA0_OutString("Press any bumper"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Press 1 to go back to menu"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        uint8_t exit = 0, CData =0;
+                        exit = EUSCIA0_InUDec();
+                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        CData = Bump_Read();
+                        do{
+                            if(CData!=Bump_Read()){
+                                for(int x=1; x<7;x++ ){
+                                    if(CData%2 == 0){
+                                        EUSCIA0_OutString("Switch ");
+                                        EUSCIA0_OutUDec(x);
+                                        EUSCIA0_OutString(" Contacted. ");
+                                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                                    }
+                                    CData = CData>>1;
+                                }
+                                CData = Bump_Read();
+                            }
+                        }while(exit != 1);
+                        break;
+
+                    default:
+                        break;
+                }
+                menu = 1;
+                cmd=0xDEAD;
+                break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+         case 3:
+             EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+             EUSCIA0_OutString("RSLK Reflectance Sensors Test Loading..."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+             EUSCIA0_OutString("Testing 10 samples at interval of 1s"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              for(int x=0; x<10;x++){
+                  RefData = Reflectance_Read(1000);
+                  EUSCIA0_OutString("Reflectance Sensor Data: ");
+                  EUSCIA0_OutUHex(RefData);EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                  Clock_Delay1ms(1000);
+              }
+              menu = 1;
+              cmd=0xDEAD;
               break;
-
-
-              // ....
-              // ....
-
-          default:
-              menu=1;
+//////////////////////////////////////////////////////////////////////////////////////////////////
+          case 4:
+              EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("RSLK IR Sensors Test Loading..."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("Testing 10 samples"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              for(int i = 0; i<10; i++){
+                  for(int n=0; n<2000; n++){
+                      while(ADCflag == 0){};
+                      ADCflag = 0; // show every 2000th point
+                  }
+                  UART0_OutUDec5(LeftConvert(nl));UART0_OutString(" cm,");
+                  UART0_OutUDec5(CenterConvert(nc));UART0_OutString(" cm,");
+                  UART0_OutUDec5(RightConvert(nr));UART0_OutString(" cm\r\n");
+              }
+              menu = 1;
+              cmd=0xDEAD;
               break;
+//////////////////////////////////////////////////////////////////////////////////////////////////////
+
+          // ....
+          // ....
+
+        default:
+          menu=1;
+          break;
       }
 
       if(!menu)Clock_Delay1ms(3000);
