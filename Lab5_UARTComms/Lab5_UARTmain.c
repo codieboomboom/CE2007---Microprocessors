@@ -243,7 +243,7 @@ void IRSensor_Init(void){
 
 ///////////////FOR BUMPER SWITCH//////////////////////////////////////
 
-uint8_t CollisionData, CollisionFlag;  // mailbox
+volatile uint8_t CollisionData, CollisionFlag;  // mailbox
 void HandleCollision(uint8_t bumpSensor){
    Motor_Stop();
    CollisionData = bumpSensor;
@@ -332,6 +332,45 @@ void MotorMovt(void){
      count++;
     }
 }
+///////////////////////////////////TACHOMETER//////////////////////////////////////
+uint16_t Period0;              // (1/SMCLK) units = 83.3 ns units
+uint16_t First0;               // Timer A3 first edge, P10.4
+int Done0;                     // set each rising
+// max period is (2^16-1)*83.3 ns = 5.4612 ms
+// min period determined by time to run ISR, which is about 1 us
+void PeriodMeasure0(uint16_t time){
+  P2_0 = P2_0^0x01;           // thread profile, P2.0
+  Period0 = (time - First0)&0xFFFF; // 16 bits, 83.3 ns resolution
+  First0 = time;                   // setup for next
+  Done0 = 1;
+}
+
+uint16_t Period2;              // (1/SMCLK) units = 83.3 ns units
+uint16_t First2;               // Timer A3 first edge, P8.2
+int Done2;                     // set each rising
+// max period is (2^16-1)*83.3 ns = 5.4612 ms
+// min period determined by time to run ISR, which is about 1 us
+void PeriodMeasure2(uint16_t time){
+  P2_2 = P2_2^0x01;           // thread profile, P2.4
+  Period2 = (time - First2)&0xFFFF; // 16 bits, 83.3 ns resolution
+  First2 = time;                   // setup for next
+  Done2 = 1;
+}
+
+void TimedPause(uint32_t time){
+  Clock_Delay1ms(time);          // run for a while and stop
+  Motor_Stop();
+  while(LaunchPad_Input()==0);  // wait for touch
+  while(LaunchPad_Input());     // wait for release
+}
+
+#define PERIOD 1000  // must be even
+
+void toggle_GPIO(void){
+    P2_4 ^= 0x01;     // create output
+}
+
+uint32_t main_count=0;
 //////////////////////////////////RESET////////////////////////////////////////
 void RSLK_Reset(void){
     DisableInterrupts();
@@ -340,6 +379,7 @@ void RSLK_Reset(void){
     //Initialise modules used e.g. Reflectance Sensor, Bump Switch, Motor, Tachometer etc
     // ... ...
     CollisionFlag = 0;
+    CollisionData = 0x63;
 
     EnableInterrupts();
 }
@@ -348,6 +388,7 @@ int main(void) {
   uint32_t cmd=0xDEAD, menu=0;
   uint8_t RefData;
   CollisionFlag = 0;
+  CollisionData = 0x3F;
 
 
   DisableInterrupts();
@@ -358,7 +399,7 @@ int main(void) {
   LaunchPad_Init();
   Reflectance_Init();
   IRSensor_Init();
-  //BumpInt_Init(&HandleCollision);
+  BumpInt_Init(&HandleCollision);
     //Bump_Init();
   //  Bumper_Init();
   Tachometer_Init(); //this prevents words from appearing
@@ -416,15 +457,13 @@ int main(void) {
                       //users are stupid...
                       if (left_pwm > 14998)
                         left_pwm = 14998;
-                      else if (left_pwm < 0)
-                        left_pwm = 0;
+
                       EUSCIA0_OutString("RIGHT: ");
                       right_pwm = EUSCIA0_InUDec();
                       //users are stupid again...
                       if (left_pwm > 14998)
                         right_pwm = 14998;
-                      else if (left_pwm < 0)
-                        right_pwm = 0;
+
 
                       //Time to buckle up
                       Motor_Forward(left_pwm, right_pwm);
@@ -440,15 +479,13 @@ int main(void) {
                         //users are stupid...
                         if (left_pwm > 14998)
                           left_pwm = 14998;
-                        else if (left_pwm < 0)
-                          left_pwm = 0;
+
                         EUSCIA0_OutString("RIGHT: ");
                         right_pwm = EUSCIA0_InUDec();
                         //users are stupid again...
                         if (left_pwm > 14998)
                           right_pwm = 14998;
-                        else if (left_pwm < 0)
-                          right_pwm = 0;
+
 
                         //Time to buckle up
                         Motor_Backward(left_pwm, right_pwm);
@@ -484,8 +521,7 @@ int main(void) {
                         //users are stupid again...
                         if (left_pwm > 14998)
                           right_pwm = 14998;
-                        else if (left_pwm < 0)
-                          right_pwm = 0;
+
                         left_pwm = 0;
 
                         //Time to buckle up
@@ -505,7 +541,7 @@ int main(void) {
                 EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
                 EUSCIA0_OutString("RSLK Bumper Switch Loading..."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
                 EUSCIA0_OutString("Please Select Test [0-1]"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-                EUSCIA0_OutString("[0] Edge Interrupt Bump Switch Contact"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                EUSCIA0_OutString("[0] Edge Interrupt Bump Switches Contact"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
                 EUSCIA0_OutString("[1] Individual Bumper Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
                 EUSCIA0_OutString("[2] Go Back To Main Menu"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
                 EUSCIA0_OutString("Choice: ");
@@ -514,56 +550,59 @@ int main(void) {
 
                 switch(choice){
                     case 0:
-                        UART0_OutString("You have 3 seconds to press a bumper. \r\n");
-                        UART0_OutString("3.. \r\n");
-                        Clock_Delay1ms(1000);
-                        UART0_OutString("2.. \r\n");
-                        Clock_Delay1ms(1000);
-                        UART0_OutString("1.. \r\n");
-                        Clock_Delay1ms(1000);
-                        uint8_t bumpdata, a, n;
-                        bumpdata = Bump_Read();
-                        a=5; // bumper 5 (5th bumper)
-                        n=32; // value for bumper 5
-
-                        UART0_OutString("Bump value: ");UART0_OutUDec5(bumpdata);UART0_OutString("\r\n");
-                        while(n>=1){
-                            bumpdata = bumpdata + n;
-                            if (bumpdata<=63)
-                            {
-                                UART0_OutString("Bumper ");UART0_OutUDec5(a);UART0_OutString(" held. \r\n");
-                            }
-                            else{
-                                bumpdata = bumpdata - n;
-                            }
-                            n=n/2;
-                            a=a-1;
+                        //TEST BUMP SWITCH MECHANISM (multiple bumps)
+                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Waiting for Interrupt To Happen....."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        while (1){
+                            WaitForInterrupt(); //wait for bumper to be switched
+                            if (CollisionFlag == 1)
+                                break;
                         }
+                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Bumper Switches triggered interrupt, investigating..."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Bumper Switches Readings: "); EUSCIA0_OutUDec(CollisionData);
+                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        for(uint8_t x=1; x<7;x++ ){
+                            if(CollisionData %2 == 0){
+                                EUSCIA0_OutString("Bumper Switch ");
+                                EUSCIA0_OutUDec(x);
+                                EUSCIA0_OutString(" Held. ");
+                                EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                            }
+                            CollisionData = CollisionData >> 1;
+                        }
+                        CollisionData = 0x3F;
+                        EUSCIA0_OutString("Bump Switches are studied... Returning to Menu"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                        EUSCIA0_OutString("Select Individual Bumper for continously checking next time!"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
                         menu=1;
                         cmd=0xDEAD;
-                          break;
+                        break;
 
                     case 1:
-                        EUSCIA0_OutString("Press any bumper"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-                        EUSCIA0_OutString("Press 1 to go back to menu"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-                        uint8_t exit = 0, CData =0;
-                        exit = EUSCIA0_InUDec();
+                        //Nothing contacted 63 = 0x3F
+                        EUSCIA0_OutString("Individual Bumper Test. Please press any bumper!"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
                         EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-                        CData = Bump_Read();
-                        do{
-                            if(CData!=Bump_Read()){
-                                for(int x=1; x<7;x++ ){
-                                    if(CData%2 == 0){
-                                        EUSCIA0_OutString("Switch ");
-                                        EUSCIA0_OutUDec(x);
-                                        EUSCIA0_OutString(" Contacted. ");
-                                        EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
-                                    }
-                                    CData = CData>>1;
+                        while (1){
+                            Clock_Delay1ms(3000); //delay cuz humans are slow poke
+                            for(uint8_t x=1; x<7;x++ ){
+                                if(CollisionData %2 == 0){
+                                    EUSCIA0_OutString("Bumper Switch ");
+                                    EUSCIA0_OutUDec(x);
+                                    EUSCIA0_OutString(" Contacted. ");
+                                    EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                                    break; //only 1 bumper tested.
                                 }
-                                CData = Bump_Read();
+                                CollisionData = CollisionData >> 1;
                             }
-                        }while(exit != 1);
+                            CollisionData = 0x3F; //Reset
+                            EUSCIA0_OutString("Continue?"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                            EUSCIA0_OutString("[0] Yes"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                            EUSCIA0_OutString("[1] No, go back to Menu"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+                            EUSCIA0_OutString("Choice: ");
+                            choice =EUSCIA0_InUDec();
+                            if (choice == 1)
+                                break; //stop if input from user is 1
+                        }
                         break;
 
                     default:
@@ -604,7 +643,27 @@ int main(void) {
               cmd=0xDEAD;
               break;
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
+          case 5:
+              EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("Tachometer Testing"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              TimerA1_Init(&toggle_GPIO,10);    // 50Khz sampling
+              TimerA3Capture_Init(&PeriodMeasure0,&PeriodMeasure2);
+              Clock_Delay1ms(500);
+              Motor_Forward(3000,3000); // 50%
+              for(int i = 0; i<500; i++){
+                  main_count++;
+                  if(main_count%10000){
+                      UART0_OutString("Period0 = ");
+                      UART0_OutUDec5(Period0);
+                      UART0_OutString(" Period2 = ");
+                      UART0_OutUDec5(Period2);
+                      UART0_OutString(" \r\n");
+                  }
+              }
+              Motor_Stop();
+              menu=1;
+              cmd=0xDEAD;
+                break;
           // ....
           // ....
 
