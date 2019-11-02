@@ -69,9 +69,9 @@ void BumpInt_Init(void(*task)(uint8_t)){
   P4->DIR &= ~0xED; //init the 6 above pins as input
   P4->REN |= 0xED; //enable pull up/down
   P4->OUT |= 0xED;//pull up                  // pull-up
-  P1->IES |= 0xED;                   // falling edge event (negative logic)
-  P1->IFG &= ~0xED;                  // clear 0 - 7 (reduce possibility of extra interrupt)
-  P1->IE |= 0xED;                    // arm interrupt on the above pin
+  P4->IES |= 0xED;                   // falling edge event (negative logic)
+  P4->IFG &= ~0xED;                  // clear 0 - 7 (reduce possibility of extra interrupt)
+  P4->IE |= 0xED;                    // arm interrupt on the above pin
   NVIC->IP[9] = (NVIC->IP[9] & 0xFF00FFFF)|0x00400000; // priority 2
   NVIC->ISER[1] = 0x00000040;        // enable interrupt 38 in NVIC (I/o port 4 interrupt === IRQ 38)
 }
@@ -104,9 +104,7 @@ uint8_t Bump_Read(void){
 void PORT4_IRQHandler(void){
     // write this as part of Lab 3 Challenge
     //just need to execute user task based on pointer above
-    uint8_t bump;
-    bump = Bump_Read();
-    (*Port4Task)(bump); //execute user's tasks, who's input is the Sensor reading
+    (*Port4Task)(Bump_Read()); //execute user's tasks, who's input is the Sensor reading
 
 
 }

@@ -78,25 +78,28 @@ void MotorMovt(void){
     static uint8_t motor_state=0;
 
     //Write this as part of lab3 Bonus Challenge
-    switch(motor_state){
-        case 0:
-            Motor_Forward(1000,1000);
-            if(CollisionFlag == 1){
-                motor_state = 4;
-            }
-            break;
-        case 1:
+    switch (motor_state){
+    case 0:
+        Motor_Forward(5000,5000);
+        if (CollisionFlag == 1){
+            motor_state = 1;
+            count++;
+        }
+        if (count == 15)
             Motor_Stop();
-            break;
-        case 2:
-            Motor_Right(100,0);
-            break;
-        case 3:
-            Motor_Left(0,100);
-            break;
-        case 4:
-            Motor_Backward(500,500);
-            break;
+        break;
+    case 1:
+        Motor_Backward(5000,5000);
+        Clock_Delay1ms(1000);
+        Motor_Backward(0,0);
+        motor_state = 2;
+        break;
+    case 2:
+        Motor_Right(0,5000);
+        Clock_Delay1ms(1000);
+        motor_state = 0;
+        CollisionFlag = 0;
+
     }
 }
 

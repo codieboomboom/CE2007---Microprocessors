@@ -210,4 +210,3 @@ uint16_t RxFifo0_Size(void){
     return(FifoSize);
 }
 
-

@@ -61,7 +61,6 @@ policies, either expressed or implied, of the FreeBSD Project.
 int32_t LeftConvert(int32_t nl){        // returns left distance in mm
   // write this for Lab 4
     uint32_t length=0;
-    length =
 
 
 

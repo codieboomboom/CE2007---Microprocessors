@@ -206,22 +206,31 @@ int Program5_4(void){
   }
 }
 
+void RSLK_Reset(void){
+    DisableInterrupts();
+
+    LaunchPad_Init();
+    //Initialise modules used e.g. Reflectance Sensor, Bump Switch, Motor, Tachometer etc
+    // ... ...
+
+    EnableInterrupts();
+}
 
 
 // RSLK Self-Test
 int main(void) {
-  uint32_t cmd=0, menu=0;
+  uint32_t cmd=0xDEAD, menu=0;
 
   DisableInterrupts();
   Clock_Init48MHz();  // makes SMCLK=12 MHz
-  SysTick_Init(48000,2);  // set up SysTick for 1000 Hz interrupts
-  Motor_Init();
-  Motor_Stop();
+  //SysTick_Init(48000,2);  // set up SysTick for 1000 Hz interrupts
+  //Motor_Init();
+  //Motor_Stop();
   LaunchPad_Init();
   //Bump_Init();
-  Bumper_Init();
-  IRSensor_Init();
-  Tachometer_Init();
+  //Bumper_Init();
+  //IRSensor_Init();
+  //Tachometer_Init();
   EUSCIA0_Init();     // initialize UART
   EnableInterrupts();
 
@@ -229,11 +238,52 @@ int main(void) {
       // write this as part of Lab 5
       EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
       EUSCIA0_OutString("RSLK Testing"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[0] RSLK Reset"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[1] Motor Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[2] IR Sensor Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[3] Bumper Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[4] Reflectance Sensor Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+      EUSCIA0_OutString("[5] Tachometer Test"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+
+      EUSCIA0_OutString("CMD: ");
+      cmd=EUSCIA0_InUDec();
+      EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+
+      switch(cmd){
+          case 0:
+              EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("RSLK Resetting... Please Wait and Don't Smash Robot"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              RSLK_Reset();
+              menu =1;
+              cmd=0xDEAD;
+              break;
+
+          case 1:
+              EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("RSLK Motor Testing Loading..."); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("Please Select Test Mode (0-1)"); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("[0] "); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+              EUSCIA0_OutString("[1] "); EUSCIA0_OutChar(CR); EUSCIA0_OutChar(LF);
+
+              break;
+          case 2:
+              break;
+
+
+              // ....
+              // ....
+
+          default:
+              menu=1;
+              break;
+      }
+
+      if(!menu)Clock_Delay1ms(3000);
+      else{
+          menu=0;
+      }
 
       // ....
       // ....
-
-
-
   }
 }
