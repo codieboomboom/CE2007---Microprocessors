@@ -6,4 +6,17 @@ Student get to learn about the basics of ARM microprocessors such as instruction
 
 Do note that this course dwells with the bare-metal implementation of programs on the target architecture, in contrast to CE3003, which deals with RTOS implementation on the same microcontroller platform.
 
+The breakdown for labs and courseworks are as follow:
+
+Lab 1: Introduction about Cortex M4F, ARM assembly, Embedded C programming, TI RSLK robot kit.
+  -Description: Students are guided to go through the references project to familarise with the workspace organisation, functionality of the     Code Composer Studio (IDE from Texas Instruments) and ARM Cortex M4F instruction architecture.
+  -Submission: Lab1 Handout
+  
+Lab 2: Introduction about GPIO and Interrupts in Cortex M4F
+
+Lab 3: Introduction about Timer Compare interrupt
+
+Lab 4: Introduction about Timer Capture interrup and ADC
+
+Lab 5: Assessment with Self-test program of the robot.
 
