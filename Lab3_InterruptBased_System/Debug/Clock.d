@@ -1,6 +1,6 @@
 # FIXED
 
-Clock.obj: Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Clock.c
+Clock.obj: D:/CE2007-Students/inc/Clock.c
 Clock.obj: C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h
 Clock.obj: C:/ti/ccsv7/ccs_base/arm/include/msp.h
 Clock.obj: C:/ti/ccsv7/ccs_base/arm/include/msp432p401r.h
@@ -11,7 +11,7 @@ Clock.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/core_cm4.h
 Clock.obj: C:/ti/ccsv7/ccs_base/arm/include/CMSIS/cmsis_compiler.h
 Clock.obj: C:/ti/ccsv7/ccs_base/arm/include/system_msp432p401r.h
 
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Clock.c: 
+D:/CE2007-Students/inc/Clock.c: 
 C:/ti/ccsv7/tools/compiler/ti-cgt-arm_16.9.6.LTS/include/stdint.h: 
 C:/ti/ccsv7/ccs_base/arm/include/msp.h: 
 C:/ti/ccsv7/ccs_base/arm/include/msp432p401r.h: 

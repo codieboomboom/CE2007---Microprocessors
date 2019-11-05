@@ -61,16 +61,14 @@ policies, either expressed or implied, of the FreeBSD Project.
 int32_t LeftConvert(int32_t nl){        // returns left distance in mm
   // write this for Lab 4
     uint32_t length=0;
-
-
-
+    length = 90577.36/(nl-312.0392);
     return length; // replace this line
 }
 
 int32_t CenterConvert(int32_t nc){   // returns center distance in mm
   // write this for Lab 4
     uint32_t length=0;
-
+    length = 102858.5/(nc+891.2538);
 
 
     return length; // replace this line
@@ -80,7 +78,9 @@ int32_t RightConvert(int32_t nr){      // returns right distance in mm
   // write this for Lab 4
     uint32_t length=0;
 
-
+    length = 90160.43/(nr-681.0325);
+//    if (length < 10)
+//        return 10000;
 
     return length; // replace this line
 }

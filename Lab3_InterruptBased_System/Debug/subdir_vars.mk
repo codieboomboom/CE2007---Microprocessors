@@ -9,18 +9,18 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/BumpInt.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Clock.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/CortexM.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/FlashProgram.c \
+D:/CE2007-Students/inc/BumpInt.c \
+D:/CE2007-Students/inc/Clock.c \
+D:/CE2007-Students/inc/CortexM.c \
+D:/CE2007-Students/inc/FlashProgram.c \
 ../Lab3_EdgeInterruptsmain.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/LaunchPad.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Motor.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/PWM.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Reflectance.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/SysTickInts.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/TExaS.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/TimerA1.c \
+D:/CE2007-Students/inc/LaunchPad.c \
+D:/CE2007-Students/inc/Motor.c \
+D:/CE2007-Students/inc/PWM.c \
+D:/CE2007-Students/inc/Reflectance.c \
+D:/CE2007-Students/inc/SysTickInts.c \
+D:/CE2007-Students/inc/TExaS.c \
+D:/CE2007-Students/inc/TimerA1.c \
 ../startup_msp432p401r_ccs.c \
 ../system_msp432p401r.c 
 
@@ -89,18 +89,18 @@ C_DEPS__QUOTED += \
 "system_msp432p401r.d" 
 
 C_SRCS__QUOTED += \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/BumpInt.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Clock.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/CortexM.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/FlashProgram.c" \
+"D:/CE2007-Students/inc/BumpInt.c" \
+"D:/CE2007-Students/inc/Clock.c" \
+"D:/CE2007-Students/inc/CortexM.c" \
+"D:/CE2007-Students/inc/FlashProgram.c" \
 "../Lab3_EdgeInterruptsmain.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/LaunchPad.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Motor.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/PWM.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Reflectance.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/SysTickInts.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/TExaS.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/TimerA1.c" \
+"D:/CE2007-Students/inc/LaunchPad.c" \
+"D:/CE2007-Students/inc/Motor.c" \
+"D:/CE2007-Students/inc/PWM.c" \
+"D:/CE2007-Students/inc/Reflectance.c" \
+"D:/CE2007-Students/inc/SysTickInts.c" \
+"D:/CE2007-Students/inc/TExaS.c" \
+"D:/CE2007-Students/inc/TimerA1.c" \
 "../startup_msp432p401r_ccs.c" \
 "../system_msp432p401r.c" 
 

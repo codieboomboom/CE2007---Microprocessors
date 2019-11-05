@@ -84,7 +84,7 @@ void Motor_Init(void){
         P1->SEL0 &= ~0xC0;
         P1->SEL1 &= ~0xC0;    // 1) configure P1.6, 1.7 as GPIO
         P1->DIR |= 0xC0;      // 2) make P1.6, 1.7 output
-        P1->OUT &= ~0xC0;     // 3) output LOW
+        P1->OUT &= ~0xC0;     // 3) output LOW (forward by default)
 
         PWM_Init34(PERIOD, 0, 0);
 
@@ -102,7 +102,7 @@ void Motor_Stop(void){
     PWM_Duty4(0);
       P1->OUT &= ~0xC0;
       P3->OUT &= ~0xC0;   // low current sleep mode
-      P2->OUT &= ~0xC0;
+      //P2->OUT &= ~0xC0;
 
 
 }
@@ -120,7 +120,7 @@ void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){
     PWM_Duty4(rightDuty);
     P1->OUT &=~0xC0;// set forward direction
     P3->OUT |=0xC0;
-    P2->OUT |=0xC0;
+    //P2->OUT |=0xC0;
 
 }
 
@@ -133,11 +133,13 @@ void Motor_Forward(uint16_t leftDuty, uint16_t rightDuty){
 // Output: none
 // Assumes: Motor_Init() has been called
 void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){ 
-    //PWM_Duty3(leftDuty);
+
+    P1->OUT &=~0x80;
+    P1->OUT |=0x40;
+    P3->OUT |=0xC0;
+    PWM_Duty3(leftDuty);
     PWM_Duty4(rightDuty);
-    P1->OUT &=~0xC0;// set forward direction
-    P3->OUT |=0x40;
-    P2->OUT |=0x40;
+    //P2->OUT |=0x40;
 }
 
 // ------------Motor_Left------------
@@ -150,12 +152,12 @@ void Motor_Right(uint16_t leftDuty, uint16_t rightDuty){
 // Assumes: Motor_Init() has been called
 void Motor_Left(uint16_t leftDuty, uint16_t rightDuty){ 
   // write this as part of Lab 3
-    PWM_Duty3(leftDuty);
-    //PWM_Duty4(rightDuty);
-    P1->OUT &=~0xC0;// set forward direction
-        //enable left and right motor
-    P3->OUT |= 0x80;
-    P2->OUT |= 0x80;
+    P1->OUT &=~0x40;// set forward for right (6th bit), backward for left (7th bit)
+    P1->OUT |=0x80;
+    P3->OUT |= 0xC0; //enable left and right motor
+    //P2->OUT |= 0xC0;
+    PWM_Duty3(leftDuty); //left wheel duty
+    PWM_Duty4(rightDuty); //right wheel duty
 
 }
 
@@ -173,7 +175,7 @@ void Motor_Backward(uint16_t leftDuty, uint16_t rightDuty){
     P1->OUT |= 0xC0;// set backward direction
     //enable left and right motor
     P3->OUT |=0xC0;
-    P2->OUT |=0xC0;
+    //P2->OUT |=0xC0;
 
 
 }
