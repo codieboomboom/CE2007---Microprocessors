@@ -9,23 +9,23 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
-C:/temp/CE2007/inc/ADC14.c \
-C:/temp/CE2007/inc/BumpInt.c \
-C:/temp/CE2007/inc/Clock.c \
-C:/temp/CE2007/inc/CortexM.c \
-C:/temp/CE2007/inc/EUSCIA0.c \
-C:/temp/CE2007/inc/FIFO0.c \
-C:/temp/CE2007/inc/IRDistance.c \
-C:/temp/CE2007/inc/LPF.c \
+D:/CE2007-Students/inc/ADC14.c \
+D:/CE2007-Students/inc/BumpInt.c \
+D:/CE2007-Students/inc/Clock.c \
+D:/CE2007-Students/inc/CortexM.c \
+D:/CE2007-Students/inc/EUSCIA0.c \
+D:/CE2007-Students/inc/FIFO0.c \
+D:/CE2007-Students/inc/IRDistance.c \
+D:/CE2007-Students/inc/LPF.c \
 ../Lab5_UARTmain.c \
-C:/temp/CE2007/inc/LaunchPad.c \
-C:/temp/CE2007/inc/Motor.c \
-C:/temp/CE2007/inc/PWM.c \
-C:/temp/CE2007/inc/Reflectance.c \
-C:/temp/CE2007/inc/SysTickInts.c \
-C:/temp/CE2007/inc/TA3InputCapture.c \
-C:/temp/CE2007/inc/TimerA1.c \
-C:/temp/CE2007/inc/UART0.c \
+D:/CE2007-Students/inc/LaunchPad.c \
+D:/CE2007-Students/inc/Motor.c \
+D:/CE2007-Students/inc/PWM.c \
+D:/CE2007-Students/inc/Reflectance.c \
+D:/CE2007-Students/inc/SysTickInts.c \
+D:/CE2007-Students/inc/TA3InputCapture.c \
+D:/CE2007-Students/inc/TimerA1.c \
+D:/CE2007-Students/inc/UART0.c \
 ../startup_msp432p401r_ccs.c \
 ../system_msp432p401r.c 
 
@@ -114,23 +114,23 @@ C_DEPS__QUOTED += \
 "system_msp432p401r.d" 
 
 C_SRCS__QUOTED += \
-"C:/temp/CE2007/inc/ADC14.c" \
-"C:/temp/CE2007/inc/BumpInt.c" \
-"C:/temp/CE2007/inc/Clock.c" \
-"C:/temp/CE2007/inc/CortexM.c" \
-"C:/temp/CE2007/inc/EUSCIA0.c" \
-"C:/temp/CE2007/inc/FIFO0.c" \
-"C:/temp/CE2007/inc/IRDistance.c" \
-"C:/temp/CE2007/inc/LPF.c" \
+"D:/CE2007-Students/inc/ADC14.c" \
+"D:/CE2007-Students/inc/BumpInt.c" \
+"D:/CE2007-Students/inc/Clock.c" \
+"D:/CE2007-Students/inc/CortexM.c" \
+"D:/CE2007-Students/inc/EUSCIA0.c" \
+"D:/CE2007-Students/inc/FIFO0.c" \
+"D:/CE2007-Students/inc/IRDistance.c" \
+"D:/CE2007-Students/inc/LPF.c" \
 "../Lab5_UARTmain.c" \
-"C:/temp/CE2007/inc/LaunchPad.c" \
-"C:/temp/CE2007/inc/Motor.c" \
-"C:/temp/CE2007/inc/PWM.c" \
-"C:/temp/CE2007/inc/Reflectance.c" \
-"C:/temp/CE2007/inc/SysTickInts.c" \
-"C:/temp/CE2007/inc/TA3InputCapture.c" \
-"C:/temp/CE2007/inc/TimerA1.c" \
-"C:/temp/CE2007/inc/UART0.c" \
+"D:/CE2007-Students/inc/LaunchPad.c" \
+"D:/CE2007-Students/inc/Motor.c" \
+"D:/CE2007-Students/inc/PWM.c" \
+"D:/CE2007-Students/inc/Reflectance.c" \
+"D:/CE2007-Students/inc/SysTickInts.c" \
+"D:/CE2007-Students/inc/TA3InputCapture.c" \
+"D:/CE2007-Students/inc/TimerA1.c" \
+"D:/CE2007-Students/inc/UART0.c" \
 "../startup_msp432p401r_ccs.c" \
 "../system_msp432p401r.c" 
 

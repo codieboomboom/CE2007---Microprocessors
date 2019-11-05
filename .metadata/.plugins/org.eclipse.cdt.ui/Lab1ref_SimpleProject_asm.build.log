@@ -1,0 +1,17 @@
+
+**** Clean-only build of configuration Debug for project Lab1ref_SimpleProject_asm ****
+
+"C:\\ti\\ccsv7\\utils\\bin\\gmake" -k -j 8 clean -O 
+ 
+DEL /F  "Lab1_ref_SimpleProject_asm.hex"  "Lab1_ref_SimpleProject_asm.out" 
+DEL /F "main.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
+DEL /F "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
+DEL /F "main.d" 
+Could Not Find Y:\CE2007\CE2007Labs-Students-17072019\CE2007-Students\Lab1ref_SimpleProject_asm\Debug\Lab1_ref_SimpleProject_asm.hex
+Could Not Find Y:\CE2007\CE2007Labs-Students-17072019\CE2007-Students\Lab1ref_SimpleProject_asm\Debug\main.obj
+Could Not Find Y:\CE2007\CE2007Labs-Students-17072019\CE2007-Students\Lab1ref_SimpleProject_asm\Debug\startup_msp432p401r_ccs.d
+Could Not Find Y:\CE2007\CE2007Labs-Students-17072019\CE2007-Students\Lab1ref_SimpleProject_asm\Debug\main.d
+'Finished clean'
+ 
+
+**** Build Finished ****

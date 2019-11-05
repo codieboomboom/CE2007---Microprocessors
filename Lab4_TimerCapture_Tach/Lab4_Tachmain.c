@@ -122,6 +122,14 @@ void toggle_GPIO(void){
 
 uint32_t main_count=0;
 
+void Tachometer_Init(void){
+    P2->SEL0 &= ~0x11;
+    P2->SEL1 &= ~0x11;  // configure P2.0 and P2.4 as GPIO
+    P2->DIR |= 0x11;    // P2.0 and P2.4 outputs
+    First0 = First2 = 0; // first will be wrong
+    Done0 = Done2 = 0;   // set on subsequent
+}
+
 void main(void){
     DisableInterrupts();
     Clock_Init48MHz();   // 48 MHz clock; 12 MHz Timer A clock

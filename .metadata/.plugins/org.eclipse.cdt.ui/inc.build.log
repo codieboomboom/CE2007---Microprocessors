@@ -1,0 +1,15 @@
+
+**** Clean-only build of configuration Debug for project inc ****
+
+"C:\\ti\\ccsv7\\utils\\bin\\gmake" -k -j 8 clean -O 
+ 
+DEL /F  "inc.hex"  "inc.out" 
+DEL /F "ADC14.obj" "AP.obj" "Bump.obj" "Clock.obj" "CortexM.obj" "EUSCIA0.obj" "FIFO0.obj" "FlashProgram.obj" "GPIO.obj" "IRDistance.obj" "LPF.obj" "LaunchPad.obj" "Motor.obj" "MotorSimple.obj" "Nokia5110.obj" "PWM.obj" "Reflectance.obj" "SysTick.obj" "TA3InputCapture.obj" "TExaS.obj" "Tachometer.obj" "TimerA0.obj" "TimerA1.obj" "TimerA2.obj" "UART0.obj" "UART1.obj" "Ultrasound.obj" "incmain.obj" "startup_msp432p401r_ccs.obj" "system_msp432p401r.obj" 
+DEL /F "ADC14.d" "AP.d" "Bump.d" "Clock.d" "CortexM.d" "EUSCIA0.d" "FIFO0.d" "FlashProgram.d" "GPIO.d" "IRDistance.d" "LPF.d" "LaunchPad.d" "Motor.d" "MotorSimple.d" "Nokia5110.d" "PWM.d" "Reflectance.d" "SysTick.d" "TA3InputCapture.d" "TExaS.d" "Tachometer.d" "TimerA0.d" "TimerA1.d" "TimerA2.d" "UART0.d" "UART1.d" "Ultrasound.d" "incmain.d" "startup_msp432p401r_ccs.d" "system_msp432p401r.d" 
+Could Not Find Y:\CE2007\CE2007Labs-Students-17072019\CE2007-Students\inc\Debug\inc.hex
+Could Not Find Y:\CE2007\CE2007Labs-Students-17072019\CE2007-Students\inc\Debug\ADC14.obj
+Could Not Find Y:\CE2007\CE2007Labs-Students-17072019\CE2007-Students\inc\Debug\ADC14.d
+'Finished clean'
+ 
+
+**** Build Finished ****

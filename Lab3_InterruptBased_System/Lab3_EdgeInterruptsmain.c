@@ -78,7 +78,81 @@ void MotorMovt(void){
     static uint8_t motor_state=0;
 
     //Write this as part of lab3 Bonus Challenge
+    if(CollisionFlag){
+            if(!(CollisionData&0x08) && !(CollisionData&0x04)){
+                // if both bump sensors 2 & 3 are activated, motor state = 1
+                // obstacle directly in front of robot
+                motor_state = 1;
+            }
+            else if(!(CollisionData&0x20) || !(CollisionData&0x10) || !(CollisionData&0x08)){
+                // if any sensors 3,4,5 are activated, motor state = 2
+                // obstacle on the left side
+                motor_state = 2;
+            }
+            else if(!(CollisionData&0x04) || !(CollisionData&0x02) || !(CollisionData&0x01)){
+                // if any sensors 2,1,0 are activated, motor state = 3
+                // obstacle on the right side
+                motor_state = 3;
+            }
+            count = 0;
+            CollisionFlag = 0;
+            Clock_Delay1ms(500);
+        }
 
+     while(count<30){
+        switch(motor_state){
+        case 0:
+            //No obstacle, continue moving forward
+            Motor_Forward(3000, 3000);
+            break;
+        case 1:
+            if(count<10){
+                //direct obstacle in front, need move backward
+                Motor_Backward(3000, 3000);
+            }
+            else if(count> 10 && count < 20){
+                //rotate to the right
+                Motor_Right(2000, 2000);
+            }
+            else if(count> 20 && count < 30){
+                //safe to move forward a bit again, test water lah
+                Motor_Forward(3000, 3000);
+                motor_state = 0;
+            }
+            break;
+        case 2:
+            // obstacle on the left side
+            if(count<10){
+                Motor_Backward(3000, 3000);
+            }
+            else if(count> 10 && count < 20){
+                Motor_Right(2000, 2000);
+            }
+            else if(count> 20 && count < 30){
+                Motor_Forward(3000, 3000);
+                motor_state = 0;
+            }
+            break;
+        case 3:
+            // obstacle on the right side
+            if(count<10){
+                Motor_Backward(3000, 3000);
+            }
+            else if(count> 10 && count < 20){
+                //only can move left
+                Motor_Left(2000, 2000);
+            }
+            else if(count> 20 && count < 30){
+                Motor_Forward(3000, 3000);
+                motor_state = 0;
+            }
+            break;
+        default:
+            break;
+        }
+
+     count++;
+    }
 }
 
 

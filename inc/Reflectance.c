@@ -171,21 +171,21 @@ uint8_t Reflectance_Center(uint32_t time){
 // Perform sensor integration
 // Input: data is 8-bit result from line sensor (need covert to binary first
 // Output: position in 0.1mm relative to center of line
-int32_t Reflectance_Position(uint8_t data){
-    // write this as part of Lab 2
-    uint32_t position;
-    int32_t sum, sumWeight;
-    int32_t W[7] = {332, 237, 142, 47, -47, -142, -237, -332};
-    sum = sumWeight = 0;
-    for (uint32_t i = 0; i<8; i++){
-        sumWeight += (data%2)*W[i];
-        sum += data%2;
-        data = data/2;
-    }
-    position = sumWeight/sum;
-
-    return position;
-}
+//int32_t Reflectance_Position(uint8_t data){
+//    // write this as part of Lab 2
+//    uint32_t position;
+//    int32_t sum, sumWeight;
+//    int32_t W[7] = {332, 237, 142, 47, -47, -142, -237, -332};
+//    sum = sumWeight = 0;
+//    for (int32_t i = 0; i<8; i++){
+//        sumWeight += (data%2)*W[i];
+//        sum += data%2;
+//        data = data/2;
+//    }
+//    position = sumWeight/sum;
+//
+//    return position;
+//}
 ////////////////////////////////////////////////
 //Lab 3
 ////////////////////////////////////////////////

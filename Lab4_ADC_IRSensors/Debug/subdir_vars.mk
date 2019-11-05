@@ -9,15 +9,15 @@ CMD_SRCS += \
 ../msp432p401r.cmd 
 
 C_SRCS += \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/ADC14.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Clock.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/CortexM.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/IRDistance.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/LPF.c \
+D:/CE2007-Students/inc/ADC14.c \
+D:/CE2007-Students/inc/Clock.c \
+D:/CE2007-Students/inc/CortexM.c \
+D:/CE2007-Students/inc/IRDistance.c \
+D:/CE2007-Students/inc/LPF.c \
 ../Lab4_ADCmain.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/LaunchPad.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/TimerA1.c \
-Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/UART0.c \
+D:/CE2007-Students/inc/LaunchPad.c \
+D:/CE2007-Students/inc/TimerA1.c \
+D:/CE2007-Students/inc/UART0.c \
 ../startup_msp432p401r_ccs.c \
 ../system_msp432p401r.c 
 
@@ -74,15 +74,15 @@ C_DEPS__QUOTED += \
 "system_msp432p401r.d" 
 
 C_SRCS__QUOTED += \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/ADC14.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/Clock.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/CortexM.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/IRDistance.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/LPF.c" \
+"D:/CE2007-Students/inc/ADC14.c" \
+"D:/CE2007-Students/inc/Clock.c" \
+"D:/CE2007-Students/inc/CortexM.c" \
+"D:/CE2007-Students/inc/IRDistance.c" \
+"D:/CE2007-Students/inc/LPF.c" \
 "../Lab4_ADCmain.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/LaunchPad.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/TimerA1.c" \
-"Y:/CE2007/CE2007Labs-Students-17072019/CE2007-Students/inc/UART0.c" \
+"D:/CE2007-Students/inc/LaunchPad.c" \
+"D:/CE2007-Students/inc/TimerA1.c" \
+"D:/CE2007-Students/inc/UART0.c" \
 "../startup_msp432p401r_ccs.c" \
 "../system_msp432p401r.c" 
 
