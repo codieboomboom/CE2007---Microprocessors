@@ -15,8 +15,12 @@ More info: https://university.ti.com/en/faculty/ti-robotics-system-learning-kit/
 The coursework program was adapted from the TI-RSLK University Program curriculum, however this should include enough concepts for students to work with any bare-metal system. The breakdown for labs and courseworks are as follow:
 
 Lab 1: Introduction about Cortex M4F, ARM assembly, Embedded C programming, TI RSLK robot kit.
-Lab 2: Introduction about GPIO and Interrupts in Cortex M4F
-Lab 3: Introduction about Timer Compare interrupt
-Lab 4: Introduction about Timer Capture interrup and ADC
+
+Lab 2: Introduction about GPIO and Interrupts in Cortex M4F.
+
+Lab 3: Introduction about Timer Compare interrupt.
+
+Lab 4: Introduction about Timer Capture interrup and ADC.
+
 Lab 5: Assessment with Self-test program of the robot.
 
