@@ -24,3 +24,13 @@ Lab 4: Introduction about Timer Capture interrup and ADC.
 
 Lab 5: Assessment with Self-test program of the robot.
 
+The repo can be navigated as following:
+- Lab Manual and Handouts store the lab handouts that students are expected to submit after every lab session, based on what they learn in the lab session.
+- Labxref_xxxx stores the reference code for every lab session. These modules serve as a guide of student on how to prototype certain things and are meant to be used for studying before lab.
+- Labx-xxxx stores the source code for the lab sessions.
+
+Assessment:
+- All Lab handouts
+- Lab 5 Self test program: basic 4 features + any add on. Highly advice to implement the most crazy things you can.
+
+
