@@ -1,0 +1,8 @@
+.jxbrowser-data/
+.metadata/
+.launches/
+.settings/
+*.project
+*.ccsproject
+*.cproject
+Debug/
