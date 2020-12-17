@@ -1,1 +1,0 @@
-"./ADC14.obj" "./ADCSWTriggermain.obj" "./Clock.obj" "./CortexM.obj" "./LaunchPad.obj" "./SysTickInts.obj" "./UART0.obj" "./startup_msp432p401r_ccs.obj" "./system_msp432p401r.obj" "../msp432p401r.cmd" -llibc.a 
