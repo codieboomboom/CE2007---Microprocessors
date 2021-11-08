@@ -42,8 +42,7 @@ Some [tips and tricks](./TIPS.md) to get yourself going with embedded programmin
 
 ## Donate
 If I saved your ass during CE2007, please consider buying me a coffee:
-- HNT: 
-- BTC:
-- ETH/MATIC/AMP
+- BTC: bc1qd57am435yy2wamsy8h7pjfwgw9l8fvpts49snt
+- ETH/MATIC/AMP: 0x5824Ca736409ABb3dE87B6ab7328E7Ec3B14C086
 
 
