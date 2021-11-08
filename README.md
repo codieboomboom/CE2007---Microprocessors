@@ -40,4 +40,10 @@ The repo can be navigated as following:
 ## Other tips
 Some [tips and tricks](./TIPS.md) to get yourself going with embedded programming
 
+## Donate
+If I saved your ass during CE2007, please consider buying me a coffee:
+- HNT: 
+- BTC:
+- ETH/MATIC/AMP
+
 
