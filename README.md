@@ -74,8 +74,8 @@ With BSP, an application programmer can develop very fast (refer to MDP course w
 ## This Repository
 The repo can be navigated as following:
 - Lab Manual and Handouts store the lab handouts that students are expected to submit after every lab session, based on what they learn in the lab session.
-- Labxref_xxxx stores the reference code for every lab session. These modules serve as a guide of student on how to prototype certain things and are meant to be used for studying before lab.
-- Labx-xxxx stores the source code for the lab sessions.
+- *Labxref_xxxx* stores the reference code for every lab session. These modules serve as a guide of student on how to prototype certain things and are meant to be used for studying before lab.
+- *Labx-xxxx* stores the source code for the lab sessions.
 - For the aspiring student, a look into inc/ folder will show you the gist of how HAL/BSP should contains: a bunch of header files defining the functionalitiy that application can call and a bunch of .c files implementing those APIs at lower level (flipping bit of registers for example)
 
 ## Other tips
