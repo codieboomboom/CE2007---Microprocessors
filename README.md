@@ -82,9 +82,4 @@ The repo can be navigated as following:
 - Some [tips and tricks](./TIPS.md) to get yourself going with embedded programming
 - Embedded C is the de-facto standard of embedded industry and this dinosaur tech is probably scaring many of you aways from diving into this stable field. Maybe a newer language like Rustlang could inspire you to do so (and plus it is way safer to write Rust than C/C++)
 
-## Donate
-If I saved your ass during CE2007, please consider buying me a coffee:
-- BTC: bc1qd57am435yy2wamsy8h7pjfwgw9l8fvpts49snt
-- ETH/MATIC/AMP: 0x5824Ca736409ABb3dE87B6ab7328E7Ec3B14C086
-
 
